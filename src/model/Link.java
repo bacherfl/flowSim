@@ -8,7 +8,7 @@ import sim.Scheduler;
 public class Link {
 
     public static final int DEFAULT_BANDWIDTH = 10000000;
-    public static final int DEFAULT_DELAY = 10;
+    public static final int DEFAULT_DELAY = 100;
     public static final double DEFAULT_RELIABILITY = 1.0;
 
     private int bandwidth;
@@ -89,15 +89,16 @@ public class Link {
             target = f1;
         }
         final Face finalTarget = target;
+        long actualDelay = Math.max(1, (long) (delay + (Math.random() * 30 - 15))); //introduce some variance to delay
         if (packet instanceof Data) {
             if (delay > 0)
-                Scheduler.getInstance().scheduleEventIn(delay, () -> finalTarget.receiveData((Data) packet));
+                Scheduler.getInstance().scheduleEventIn(actualDelay, () -> finalTarget.receiveData((Data) packet));
             else
                 finalTarget.receiveData((Data) packet);
         }
         else if (packet instanceof Interest) {
             if (delay > 0)
-                Scheduler.getInstance().scheduleEventIn(delay, () -> finalTarget.receiveInterest((Interest) packet));
+                Scheduler.getInstance().scheduleEventIn(actualDelay, () -> finalTarget.receiveInterest((Interest) packet));
             else
                 finalTarget.receiveInterest((Interest) packet);
         }

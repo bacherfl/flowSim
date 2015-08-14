@@ -9,7 +9,7 @@ import java.util.Observable;
 public class Simulator extends Observable {
     private long currentTime = 0L;
     private boolean running = false;
-    private long simulationLength;
+    private long simulationLength;  //1 tick := 0.1ms
 
     private static Simulator instance;
 
@@ -41,11 +41,11 @@ public class Simulator extends Observable {
     }
 
     public long getSimulationLengthInSeconds() {
-        return simulationLength / 1000;
+        return simulationLength / 10000;
     }
 
     public void setSimulationLengthInSeconds(long simulationLengthInSeconds) {
-        this.simulationLength = simulationLengthInSeconds * 1000;
+        this.simulationLength = simulationLengthInSeconds * 10000;
     }
 
     public static Simulator getInstance() {
@@ -56,7 +56,7 @@ public class Simulator extends Observable {
         return instance;
     }
 
-    public void setSimulationLengthInMilliSeconds(Long simulationLength) {
+    public void setSimulationLengthInTenthMilliSeconds(Long simulationLength) {
         this.simulationLength = simulationLength;
     }
 }

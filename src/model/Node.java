@@ -28,6 +28,7 @@ public class Node {
 
     public Node() {
         id = nextNodeId++;
+        pit.setNode(this);
         Face appFace = new Face();
         addFace(appFace);
     }
@@ -78,8 +79,10 @@ public class Node {
     }
 
     public void onReceiveData(Data data, Face inFace) {
-        pit.getPit().get(data.getName()).getInRecords().keySet().forEach(face -> face.sendData(data));
-        pit.clearPitEntry(data.getName());
+        if (pit.getPit().get(data.getName()) != null) {
+            pit.getPit().get(data.getName()).getInRecords().keySet().forEach(face -> face.sendData(data));
+            pit.clearPitEntry(data.getName());
+        }
     }
 
     public void addFace(Face face) {
@@ -91,11 +94,13 @@ public class Node {
     }
 
     public void sendInterest(Interest interest, Face outFace) {
-        pit.sentInterest(interest, outFace);
-        if (outFace.isAppFace()) {
-            app.onInterest(interest);
-        } else {
-            outFace.sendInterest(interest);
+        if (pit.getPit().get(interest.getName()) != null) { //check if interest has been satisfied
+            pit.sentInterest(interest, outFace);
+            if (outFace.isAppFace()) {
+                app.onInterest(interest);
+            } else {
+                outFace.sendInterest(interest);
+            }
         }
     }
 

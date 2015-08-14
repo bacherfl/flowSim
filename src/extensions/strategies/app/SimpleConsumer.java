@@ -3,6 +3,7 @@ package extensions.strategies.app;
 import model.Data;
 import model.Interest;
 import model.app.App;
+import sim.Simulator;
 
 /**
  * Created by florian on 13.08.2015.
@@ -19,14 +20,14 @@ public class SimpleConsumer extends App {
             interest.setName("/name");
             interest.setTimeout(5000);
             interest.setSize(50);
-            System.out.println("Node " + node.getId() + " sending interest " + interest.getName());
+            System.out.println(Simulator.getInstance().getCurrentTime() + " Node " + node.getId() + " sending interest " + interest.getName());
             appFace.sendInterest(interest);
         }
     }
 
     @Override
     public void onInterest(Interest interest) {
-        System.out.println("Node " + node.getId() + " received interest " + interest.getName());
+        System.out.println(Simulator.getInstance().getCurrentTime() + " Node " + node.getId() + " received interest " + interest.getName());
         Data data = new Data();
         data.setSize(4096);
         data.setName(interest.getName());
@@ -35,7 +36,7 @@ public class SimpleConsumer extends App {
 
     @Override
     public void onData(Data data) {
-        System.out.println("Node " + node.getId() + " received data " + data.getName());
+        System.out.println(Simulator.getInstance().getCurrentTime() + " Node " + node.getId() + " received data " + data.getName());
     }
 
     @Override

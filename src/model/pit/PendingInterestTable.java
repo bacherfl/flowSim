@@ -68,7 +68,8 @@ public class PendingInterestTable {
     public void sentInterest(Interest interest, Face outFace) {
         PitEntry pitEntry = pit.get(interest.getName());
 
-        pitEntry.addOutRecord(interest, outFace);
+        if (pitEntry != null)
+            pitEntry.addOutRecord(interest, outFace);
     }
 
     public void clearPitEntry(String name) {

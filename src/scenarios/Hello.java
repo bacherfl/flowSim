@@ -4,7 +4,6 @@ import extensions.strategies.BroadcastStrategy;
 import extensions.strategies.app.SimpleConsumer;
 import model.topology.NodeContainer;
 import model.topology.TopologyHelper;
-import sim.Scheduler;
 import sim.Simulator;
 
 /**
@@ -15,10 +14,10 @@ public class Hello {
     public static void main(String[] args) {
         Simulator s = Simulator.getInstance();
 
-        NodeContainer nc = new NodeContainer(2);
+        NodeContainer nc = new NodeContainer(4);
         nc.getNodes().forEach(node -> {
             SimpleConsumer simpleConsumer = new SimpleConsumer();
-            if (node.getId() == 1)
+            if (node.getId() != 0)
                 simpleConsumer.setConsume(false);
             simpleConsumer.startAt(1);
             node.setApp(simpleConsumer);
@@ -28,8 +27,11 @@ public class Hello {
         TopologyHelper th = new TopologyHelper();
 
         th.addLink(nc.getNodes().get(0), nc.getNodes().get(1));
+        th.addLink(nc.getNodes().get(0), nc.getNodes().get(2));
+        th.addLink(nc.getNodes().get(1), nc.getNodes().get(3));
+        th.addLink(nc.getNodes().get(1), nc.getNodes().get(2));
 
-        s.setSimulationLengthInMilliSeconds(40L);
+        s.setSimulationLengthInTenthMilliSeconds(400L);
         s.start();
     }
 }
