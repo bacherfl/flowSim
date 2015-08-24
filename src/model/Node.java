@@ -5,6 +5,7 @@ import model.fw.ForwardingStrategy;
 import model.pit.PendingInterestTable;
 import model.pit.PitEntry;
 import model.app.App;
+import sim.Simulator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class Node {
 
     private App app;
     private ForwardingStrategy forwardingStrategy;
-    private ContentStore contentStore;
+    private ContentStore contentStore = new ContentStore();
     private PendingInterestTable pit = new PendingInterestTable();
 
     public Node() {
@@ -70,19 +71,31 @@ public class Node {
     }
 
     public void onReceiveInterest(Interest interest, Face inFace) {
+        System.out.println(Simulator.getInstance().getCurrentTime() + " Node " + getId() + " received Interest " + interest.getName());
         PitEntry pitEntry = pit.addPitEntry(interest, inFace);
         if (pitEntry == null) {
             return;
         }
-        //TODO lookup in content store
+
+        Data data = contentStore.getItem(interest);
+        if (data != null) {
+            sendOutData(data);
+            return;
+        }
         forwardingStrategy.onInterest(interest, inFace, pitEntry);
     }
 
     public void onReceiveData(Data data, Face inFace) {
+        System.out.println(Simulator.getInstance().getCurrentTime() + " Node " + getId() + " received Data " + data.getName());
+        contentStore.onData(data);
         if (pit.getPit().get(data.getName()) != null) {
-            pit.getPit().get(data.getName()).getInRecords().keySet().forEach(face -> face.sendData(data));
-            pit.clearPitEntry(data.getName());
+            sendOutData(data);
         }
+    }
+
+    private void sendOutData(Data data) {
+        pit.getPit().get(data.getName()).getInRecords().keySet().forEach(face -> face.sendData(data));
+        pit.clearPitEntry(data.getName());
     }
 
     public void addFace(Face face) {
