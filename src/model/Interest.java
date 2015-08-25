@@ -5,6 +5,7 @@ package model;
  */
 public class Interest extends Packet {
 
+    public static final int INTEREST_SIZE = 50;
     private long timeout;
     private int nonce;
 

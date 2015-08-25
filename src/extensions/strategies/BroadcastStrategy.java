@@ -32,7 +32,7 @@ public class BroadcastStrategy extends ForwardingStrategy {
     }
 
     @Override
-    public void OnData(Data data, Face inFace) {
+    public void OnData(Data data, Face inFace, PitEntry pitEntry) {
 
     }
 

@@ -88,7 +88,9 @@ public class Node {
     public void onReceiveData(Data data, Face inFace) {
         System.out.println(Simulator.getInstance().getCurrentTime() + " Node " + getId() + " received Data " + data.getName());
         contentStore.onData(data);
-        if (pit.getPit().get(data.getName()) != null) {
+        PitEntry pitEntry = pit.getPit().get(data.getName());
+        if (pitEntry != null) {
+            forwardingStrategy.OnData(data, inFace, pitEntry);
             sendOutData(data);
         }
     }

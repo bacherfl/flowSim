@@ -1,4 +1,4 @@
-package extensions.strategies.app;
+package extensions.app;
 
 import model.Data;
 import model.Interest;

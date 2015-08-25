@@ -7,6 +7,9 @@ import java.util.Observable;
  * Created by florian on 12.08.2015.
  */
 public class Simulator extends Observable {
+
+    public static final int SIMULATION_TICKS_PER_SECOND = 10000;
+
     private long currentTime = 0L;
     private boolean running = false;
     private long simulationLength;  //1 tick := 0.1ms
@@ -41,11 +44,11 @@ public class Simulator extends Observable {
     }
 
     public long getSimulationLengthInSeconds() {
-        return simulationLength / 10000;
+        return simulationLength / SIMULATION_TICKS_PER_SECOND;
     }
 
     public void setSimulationLengthInSeconds(long simulationLengthInSeconds) {
-        this.simulationLength = simulationLengthInSeconds * 10000;
+        this.simulationLength = simulationLengthInSeconds * SIMULATION_TICKS_PER_SECOND;
     }
 
     public static Simulator getInstance() {

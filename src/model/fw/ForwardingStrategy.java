@@ -28,7 +28,7 @@ public abstract class ForwardingStrategy {
     }
 
     public abstract void onInterest(Interest interest, Face inFace, PitEntry pitEntry);
-    public abstract void OnData(Data data, Face inFace);
+    public abstract void OnData(Data data, Face inFace, PitEntry pitEntry);
     public abstract void onDroppedPacket(Packet packet, Face face);
 
     public abstract void onTimedOutInterest(Interest interest, PitEntry pitEntry);

@@ -1,8 +1,9 @@
-package extensions.strategies.app;
+package extensions.app;
 
 import model.Data;
 import model.Interest;
 import model.app.App;
+import sim.Scheduler;
 import sim.Simulator;
 
 /**
@@ -13,6 +14,11 @@ public class SimpleConsumer extends App {
     private boolean consume = false;
     private String prefix;
 
+    private int chunkNr = 0;
+
+    private long interval = 10000;  // 1 Interest/s
+    private int nInterests = 100;
+
     public SimpleConsumer() {
         prefix = "/name";
     }
@@ -22,17 +28,29 @@ public class SimpleConsumer extends App {
         this.prefix = prefix;
     }
 
+    public SimpleConsumer(boolean consume, String prefix, int bitrate) {
+        this.consume = consume;
+        this.prefix = prefix;
+        interval = (long) (Simulator.SIMULATION_TICKS_PER_SECOND * ((Interest.INTEREST_SIZE + Data.DATA_SIZE) * 8) / (bitrate + 0.0));
+    }
+
     @Override
     public void onStartApplication() {
         if (consume) {
-            Interest interest = new Interest();
-            interest.setNonce((int) (Math.random() * 1000));
-            interest.setName(prefix);
-            interest.setTimeout(5000);
-            interest.setSize(50);
-            System.out.println(Simulator.getInstance().getCurrentTime() + " [App] Node " + node.getId() + " sending interest " + interest.getName());
-            appFace.sendInterest(interest);
+            sendNextInterest();
         }
+    }
+
+    private void sendNextInterest() {
+        Interest interest = new Interest();
+        interest.setNonce((int) (Math.random() * 1000));
+        interest.setName(prefix + "%" + chunkNr++);
+        interest.setTimeout(5000);
+        interest.setSize(50);
+        System.out.println(Simulator.getInstance().getCurrentTime() + " [App] Node " + node.getId() + " sending interest " + interest.getName());
+        appFace.sendInterest(interest);
+        if (chunkNr < nInterests)
+            Scheduler.getInstance().scheduleEventIn(interval, this::sendNextInterest);
     }
 
     @Override

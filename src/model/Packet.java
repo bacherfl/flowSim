@@ -39,4 +39,11 @@ public class Packet {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getPrefix() {
+        if (name.contains("%")) {
+            return name.split("%")[0];
+        }
+        return name;
+    }
 }

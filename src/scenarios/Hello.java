@@ -1,8 +1,9 @@
 package scenarios;
 
 import extensions.strategies.BroadcastStrategy;
-import extensions.strategies.app.SimpleConsumer;
-import extensions.strategies.app.SimpleProducer;
+import extensions.app.SimpleConsumer;
+import extensions.app.SimpleProducer;
+import extensions.strategies.LearningStrategy;
 import model.app.App;
 import model.topology.NodeContainer;
 import model.topology.TopologyHelper;
@@ -34,7 +35,7 @@ public class Hello {
             else
                 app.startAt(1);
             node.setApp(app);
-            node.setForwardingStrategy(new BroadcastStrategy());
+            node.setForwardingStrategy(new LearningStrategy());
         });
 
         TopologyHelper th = new TopologyHelper();
@@ -44,7 +45,7 @@ public class Hello {
         th.addLink(nc.getNodes().get(1), nc.getNodes().get(3));
         th.addLink(nc.getNodes().get(1), nc.getNodes().get(2));
 
-        s.setSimulationLengthInTenthMilliSeconds(4000L);
+        s.setSimulationLengthInTenthMilliSeconds(40000000L);
         s.start();
     }
 }
