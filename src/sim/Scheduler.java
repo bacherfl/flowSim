@@ -65,12 +65,13 @@ public class Scheduler implements Observer {
     }
 
     public void cancelEvent(SimulationEvent evt) {
-        List<SimulationEvent> simulationEvents = scheduledEvents
+        Optional<List<SimulationEvent>> simulationEvents = scheduledEvents
                 .values()
                 .stream()
                 .filter(events -> events.contains(evt))
-                .findFirst()
-                .get();
-        simulationEvents.remove(evt);
+                .findFirst();
+
+        if (simulationEvents.isPresent())
+            simulationEvents.get().remove(evt);
     }
 }

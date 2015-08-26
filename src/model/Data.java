@@ -5,4 +5,9 @@ package model;
  */
 public class Data extends Packet {
     public static final int DATA_SIZE = 4096;
+
+    @Override
+    public int getSize() {
+        return DATA_SIZE;
+    }
 }

@@ -7,13 +7,15 @@ import sim.Scheduler;
  */
 public class Link {
 
-    public static final int DEFAULT_BANDWIDTH = 10000000;
+    public static final int DEFAULT_BANDWIDTH = 1000000;
     public static final int DEFAULT_DELAY = 100;
     public static final double DEFAULT_RELIABILITY = 1.0;
 
     private int bandwidth;
     private int delay;
     private double reliability;
+
+    private int droppedPackets = 0;
 
     private TokenBucket tokenBucket;
 
@@ -78,6 +80,8 @@ public class Link {
             return;
         if (tokenBucket != null) {
             if (!tokenBucket.consumeToken(packet)) {
+                System.out.println("Dropped Packet!!");
+                droppedPackets++;
                 f.droppedPacket(packet);
                 return;
             }
@@ -102,5 +106,9 @@ public class Link {
             else
                 finalTarget.receiveInterest((Interest) packet);
         }
+    }
+
+    public int getDroppedPackets() {
+        return droppedPackets;
     }
 }

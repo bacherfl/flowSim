@@ -16,6 +16,8 @@ public class Simulator extends Observable {
 
     private static Simulator instance;
 
+    private OnStopApplicationCallback onStopApplicationCallback;
+
     private Simulator() {
 
     }
@@ -27,6 +29,12 @@ public class Simulator extends Observable {
 
     public void stop() {
         running = false;
+        if (onStopApplicationCallback != null)
+            onStopApplicationCallback.execute();
+    }
+
+    public void setOnStopApplicationCallback(OnStopApplicationCallback onStopApplicationCallback) {
+        this.onStopApplicationCallback = onStopApplicationCallback;
     }
 
     public void proceed() {

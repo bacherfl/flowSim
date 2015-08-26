@@ -17,7 +17,7 @@ public class SimpleConsumer extends App {
     private int chunkNr = 0;
 
     private long interval = 10000;  // 1 Interest/s
-    private int nInterests = 100;
+    private int nInterests = 66666;
 
     public SimpleConsumer() {
         prefix = "/name";
@@ -31,7 +31,8 @@ public class SimpleConsumer extends App {
     public SimpleConsumer(boolean consume, String prefix, int bitrate) {
         this.consume = consume;
         this.prefix = prefix;
-        interval = (long) (Simulator.SIMULATION_TICKS_PER_SECOND * ((Interest.INTEREST_SIZE + Data.DATA_SIZE) * 8) / (bitrate + 0.0));
+        double interestsPerSecond = (bitrate + 0.0) / ((Interest.INTEREST_SIZE + Data.DATA_SIZE) * 8);
+        interval = (long) (Simulator.SIMULATION_TICKS_PER_SECOND / interestsPerSecond);
     }
 
     @Override

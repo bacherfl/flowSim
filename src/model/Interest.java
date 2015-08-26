@@ -24,4 +24,9 @@ public class Interest extends Packet {
     public void setNonce(int nonce) {
         this.nonce = nonce;
     }
+
+    @Override
+    public int getSize() {
+        return INTEREST_SIZE;
+    }
 }
